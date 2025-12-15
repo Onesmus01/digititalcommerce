@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import AdminPanel from '@/pages/Adminpanel.jsx'
 import AllProducts from '@/pages/AllProducts.jsx'
 import AllUsers from '@/pages/AllUsers.jsx'
-
+import Products from '@/pages/Product.jsx'
 
 let backendUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
@@ -62,7 +62,9 @@ const App = () => {
            {/* Admin routes */}
           <Route path={'admin-panel'} element={<AdminPanel />}>
           <Route path={'all-users'} element={<AllUsers />} />
-          <Route path={'all-products'} element={<AllProducts />} />
+          <Route path={'all-products'} element={<AllProducts />}/>
+          <Route path={'product'} element={<Products />}/>
+
 
           </Route>
 

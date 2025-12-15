@@ -1,40 +1,94 @@
 import React, { useState } from "react";
 import { FiX, FiUploadCloud } from "react-icons/fi";
 import productCategories from "@/helpers/ProductCategory.jsx";
+import uploadImage from "@/helpers/UploadImage.jsx";
+import { toast } from "react-hot-toast";
 
+let backendUrl = import.meta.env.VITE_BACKEND_URL;
 const UploadProduct = ({ onClose }) => {
   const [data, setData] = useState({
     productName: "",
     brandName: "",
     category: "",
-    productImage: [],
+    productImage: [], // array of URLs
     description: "",
     price: "",
     selling: ""
   });
 
-  const handleUploadProductChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+  // HANDLE IMAGE UPLOAD (UP TO 4)
+  const handleUploadProductChange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    // Prevent more than 4 images
+    if (data.productImage.length + files.length > 4) {
+      alert("You can upload up to 4 images only");
+      return;
+    }
+
+    try {
+      const uploadedUrls = [];
+      for (const file of files) {
+        const url = await uploadImage(file);
+        uploadedUrls.push(url);
+      }
       setData((prev) => ({
         ...prev,
-        productImage: file
+        productImage: [...prev.productImage, ...uploadedUrls]
       }));
+    } catch (error) {
+      console.error("Upload error:", error);
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  // REMOVE IMAGE
+  const handleRemoveImage = (index) => {
     setData((prev) => ({
       ...prev,
-      [name]: value
+      productImage: prev.productImage.filter((_, i) => i !== index)
     }));
   };
 
-  const handleSubmit = (e) => {
+  // HANDLE FORM INPUT CHANGE
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // HANDLE FORM SUBMIT
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log(data);
-    // API CALL HERE
+    // Call API here
+    try {
+      const response = await fetch(`${backendUrl}/product/upload-product`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productName: data.productName,
+          brandName: data.brandName,
+          category: data.category,
+          productImage: data.productImage , // array of URLs
+          description: data.description,
+          price:  data.price,
+          selling: data.selling
+        }),
+        credentials: "include",
+      })
+      const responseData = await response.json();
+      if(response.ok){
+        toast.success(responseData.message)
+        window.location.reload();
+      }else{
+        toast.error(responseData.message || "Failed to upload product")
+      }
+    } catch (error) {
+      toast.error("Failed to upload product");
+      console.error("Submit error:", error);
+    }
   };
 
   return (
@@ -54,10 +108,7 @@ const UploadProduct = ({ onClose }) => {
         </div>
 
         {/* FORM */}
-        <form
-          onSubmit={handleSubmit}
-          className="p-6 space-y-8 max-h-[85vh] overflow-y-auto"
-        >
+        <form onSubmit={handleSubmit} className="p-6 space-y-8 max-h-[85vh] overflow-y-auto">
 
           {/* BASIC INFO */}
           <section className="space-y-4">
@@ -118,19 +169,40 @@ const UploadProduct = ({ onClose }) => {
           <section className="space-y-3">
             <h3 className="text-sm font-semibold text-slate-700 uppercase">Media</h3>
             <div className="relative w-full">
-              <label className="block text-sm font-medium text-slate-700 mb-1">Product Image</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Product Images (max 4)</label>
               <div className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-lg py-10 cursor-pointer bg-slate-50 hover:bg-slate-100 transition">
                 <FiUploadCloud className="text-indigo-600 text-4xl mb-2" />
-                <span className="text-sm text-slate-700">
-                  {data.productImage ? data.productImage.name : "Select File"}
-                </span>
+                <span className="text-sm text-slate-700">Select Files</span>
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleUploadProductChange}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
               </div>
+
+              {/* IMAGE PREVIEWS */}
+              {data.productImage.length > 0 && (
+                <div className="flex flex-wrap gap-4 mt-4">
+                  {data.productImage.map((imgUrl, index) => (
+                    <div key={index} className="relative w-32 h-32">
+                      <img
+                        src={imgUrl}
+                        alt={`preview-${index}`}
+                        className="w-full h-full object-cover rounded-lg border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </section>
 

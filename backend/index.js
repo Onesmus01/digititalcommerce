@@ -5,7 +5,7 @@ dotenv.config()
 import connectDb from './config/db.js'
 import userRouter from './routes/userRoute.js'
 import cookieParser from 'cookie-parser'
-
+import productRouter from './routes/productRoutes.js'
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -17,6 +17,7 @@ app.use(cors({
 connectDb()
 
 app.use('/api/user',userRouter)
+app.use('/api/product',productRouter)
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT,()=> console.log(`server is running at port ${PORT}`))

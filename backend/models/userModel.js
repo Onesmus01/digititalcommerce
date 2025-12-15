@@ -5,7 +5,9 @@ const userSchema = new mongoose.Schema({
     email: {type: String,required:true,unique: true},
     password:{type: String,required: true},
     profilePic: {type: String,default: ""},
-    role: {type: String,default: 'GENERAL'}
+    role: {type: String,default: 'GENERAL'},
+    createdAt: {type: Date, default: Date.now}
+},{timestamps:true
 })
 
 const User = mongoose.models.User || mongoose.model('User',userSchema)
