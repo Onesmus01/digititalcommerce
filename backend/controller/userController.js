@@ -30,7 +30,7 @@ export const signIn = async(req,res)=> {
             }
            const token = jwt.sign(tokenData,process.env.JWT_SECRET,{expiresIn: '2d'})
            res.cookie('token',token,tokenOptions)
-          res.status(201).json({success: true,message: 'login successful'})
+           res.status(201).json({success: true,message: 'login successful'})
     
 
     } catch (error) {
@@ -87,8 +87,7 @@ export const logout = async (req, res) => {
 
 export const getAllUsers = async(req,res)=> {
     try {
-        const users =await User.find()
-        console.log(users)
+        const users =await User.find().select("-password")
         await res.status(200).json({
             success:true,
             message:"user fetched Successfully",

@@ -40,7 +40,7 @@ const AllUsers = () => {
 
   return (
     <div className="p-4 sm:p-6">
-      <div className="bg-white rounded-3xl shadow-xl border border-slate-200">
+      <div className="bg-white rounded- shadow-xl border border-slate-200">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-6 py-5 border-b">

@@ -3,7 +3,7 @@
  export const userDetails = async (req,res)=> {
     try {
 
-        const user = await User.findById(req.userId)
+        const user = await User.findById(req.userId).select("-password")
         console.log(user)
 
         res.status(200).json({

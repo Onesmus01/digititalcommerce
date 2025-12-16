@@ -8,7 +8,7 @@ import SignUp from '@/pages/SignUp.jsx'
 import ForgotPassword from '@/pages/ForgotPassword.jsx'
 import { Toaster } from "react-hot-toast";
 import Context from '@/context/index.js'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import { setUserDetails } from '../store/userSlice.js'
 import {toast} from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -21,6 +21,8 @@ let backendUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const userData = useSelector(state=>state?.user?.user)
   
 
     const fetchUserDetails = async()=> {
@@ -60,13 +62,13 @@ const App = () => {
           <Route path={'/sign-up'} element={<SignUp />} />
            
            {/* Admin routes */}
-          <Route path={'admin-panel'} element={<AdminPanel />}>
+          {userData?.role==='ADMIN' && <Route path={'admin-panel'} element={<AdminPanel />}>
           <Route path={'all-users'} element={<AllUsers />} />
           <Route path={'all-products'} element={<AllProducts />}/>
           <Route path={'product'} element={<Products />}/>
 
 
-          </Route>
+          </Route>}
 
         </Routes>
       </main>

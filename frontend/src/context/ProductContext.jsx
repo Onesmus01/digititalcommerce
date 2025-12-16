@@ -30,7 +30,6 @@ const ProductContext = ({children}) => {
             const response = await responseData.json()
             if(responseData.ok){
                 setAllUsers(response.data)
-                toast.success('Users fetched Successfully')
             }else{
                 toast.error(toast.message || "Failed to fetch")
             }
@@ -71,9 +70,6 @@ const ProductContext = ({children}) => {
   }
     };
 
-    
-
-    
 
     const value ={
         userDetails,
@@ -82,7 +78,8 @@ const ProductContext = ({children}) => {
         setAllUsers,
         getAllUsers,
         setUpdateUser,
-        updateUserData
+        updateUserData,
+        toast,backendUrl
     }
 
     return(

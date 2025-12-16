@@ -12,7 +12,6 @@ const authToken = async(req,res,next)=> {
         if(!decodedToken){
              return res.status(400).json({success: false,message: "Token is missing,unauthorized"})
         }
-        console.log(decodedToken)
 
         req.userId =  decodedToken?._id
         next()

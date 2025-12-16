@@ -15,6 +15,8 @@ const Header = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef();
 
+  const userData = useSelector(state => state?.user?.user);
+
   // Close dropdown if click outside
   useEffect(() => {
     const handleClickOutside = e => {
@@ -94,7 +96,7 @@ const Header = () => {
                 {/* {user.isAdmin && ( */}
                   <Link
                     to="/admin-panel"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    className={`block px-4 py-2 text-gray-700 hover:bg-gray-100 ${userData?.role !== 'ADMIN' ? 'hidden' : ''}`}
                   >
                     Admin Panel
                   </Link>
