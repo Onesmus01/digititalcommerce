@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Context } from '@/context/ProductContext.jsx'
-import {Link} from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 
 const CategoryList = () => {
   const [categoryProduct, setCategoryProduct] = useState([])
   const { toast, backendUrl } = useContext(Context)
   const [loading, setLoading] = useState(false)
+
+  const categoryLoading = new Array(13).fill(null) // fixed loading array
 
   const fetchCategoryProduct = async () => {
     try {
@@ -34,24 +35,39 @@ const CategoryList = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex cursor-pointer items-center gap-4 overflow-x-auto">
-        {categoryProduct.length > 0 ? (
-          categoryProduct.map((cat, index) => (
-            <Link  to={'/product-category'+cat?.category} key={index} className="flex-shrink-0 text-center">
-              <div className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-white overflow-hidden flex items-center justify-center border">
-                <img
-                  src={cat.productImage}
-                  alt={cat.category}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <p className="text-sm md:text-base mt-1 capitalize">
-                {cat.category}
-              </p>
-            </Link>
-          ))
+      <div className="flex cursor-pointer items-center justify-center gap-4 overflow-x-auto">
+        {!loading ? (
+          categoryProduct.length > 0 ? (
+            categoryProduct.map((cat, index) => (
+              <Link
+                to={'/product-category/' + cat?.category} // fixed link
+                key={index}
+                className="flex-shrink-0 text-center"
+              >
+                <div className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-slate-200 overflow-hidden p-4 flex items-center justify-center border">
+                  <img
+                    src={cat.productImage}
+                    alt={cat.category}
+                    className="w-full hover:scale-105 h-full object-scale-down mix-blend-multiply"
+                  />
+                </div>
+                <p className="text-sm md:text-base mt-1 capitalize">
+                  {cat.category}
+                </p>
+              </Link>
+            ))
+          ) : (
+            <p>No Categories Found</p>
+          )
         ) : (
-          <p>No Categories Found</p>
+          categoryLoading.map((_, index) => (
+            <div
+              key={index}
+              className="h-16 w-16 md:w-20 md:h-20 rounded-full overflow-hidden bg-slate-200 flex items-center justify-center"
+            >
+              Loading ...
+            </div>
+          ))
         )}
       </div>
     </div>
