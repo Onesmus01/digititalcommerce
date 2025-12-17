@@ -250,3 +250,22 @@ export const getProductCategory = async (req, res) => {
   }
 }
 
+export const getCategoryWiseProduct = async(req,res)=> {
+  try {
+    const {category} = req.body
+    const product = await Product.find({ category })
+    res.status(200).status({
+      data: product,
+      success: true,
+      message: "Category extracted successfully"
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export default getCategoryWiseProduct

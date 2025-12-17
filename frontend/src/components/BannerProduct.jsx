@@ -13,7 +13,7 @@ import image5Mobile from '/images/banner/img5_mobile.png'
 
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa'
 
-const SLIDE_DURATION = 6000 // 🐢 very slow
+const SLIDE_DURATION = 15000 // 🐢 very slow
 
 const BannerProduct = () => {
   const [currentImage, setCurrentImage] = useState(0)
