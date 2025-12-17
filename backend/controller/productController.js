@@ -215,3 +215,38 @@ export const deleteProduct = async (req, res) => {
   }
 }
 
+export const getProductCategory = async (req, res) => {
+  try {
+    const categories = await Product.aggregate([
+      {
+        $match: {
+          category: { $ne: "" }
+        }
+      },
+      {
+        $group: {
+          _id: "$category",
+          productImage: { $first: "$productImage" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          productImage: { $arrayElemAt: ["$productImage", 0] }
+        }
+      }
+    ])
+
+    res.status(200).json({
+      success: true,
+      data: categories
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+

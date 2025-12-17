@@ -16,6 +16,7 @@ import AdminPanel from '@/pages/Adminpanel.jsx'
 import AllProducts from '@/pages/AllProducts.jsx'
 import AllUsers from '@/pages/AllUsers.jsx'
 import Products from '@/pages/Product.jsx'
+import CategoryProduct from '@/pages/CategoryProduct.jsx'
 
 let backendUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
@@ -60,6 +61,8 @@ const App = () => {
           <Route path={'/login'} element={<Login />} />
           <Route path={'/forgot-password'} element={<ForgotPassword />} />
           <Route path={'/sign-up'} element={<SignUp />} />
+          <Route path={'/product-category/:categoryName'} element={<CategoryProduct />} />
+
            
            {/* Admin routes */}
           {userData?.role==='ADMIN' && <Route path={'admin-panel'} element={<AdminPanel />}>
