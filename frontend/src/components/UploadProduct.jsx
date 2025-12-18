@@ -22,8 +22,8 @@ const UploadProduct = ({ onClose }) => {
     if (!files.length) return;
 
     // Prevent more than 4 images
-    if (data.productImage.length + files.length > 4) {
-      alert("You can upload up to 4 images only");
+    if (data.productImage.length + files.length > 20) {
+      alert("You can upload up to 20 images only");
       return;
     }
 

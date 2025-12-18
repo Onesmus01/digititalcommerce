@@ -35,7 +35,7 @@ const CategoryList = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex cursor-pointer items-center justify-center gap-4 overflow-x-auto">
+      <div className="flex cursor-pointer items-center justify-center gap-4 overflow-scroll scrollbar-none">
         {!loading ? (
           categoryProduct.length > 0 ? (
             categoryProduct.map((cat, index) => (

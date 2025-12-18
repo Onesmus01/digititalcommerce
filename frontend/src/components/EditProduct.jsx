@@ -23,8 +23,8 @@ const EditProduct = ({ onClose, product }) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
 
-    if (data.productImage.length + files.length > 4) {
-      toast.error("You can upload up to 4 images only");
+    if (data.productImage.length + files.length > 20) {
+      toast.error("You can upload up to 20 images only");
       return;
     }
 

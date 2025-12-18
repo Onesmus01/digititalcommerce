@@ -13,7 +13,7 @@ import image5Mobile from '/images/banner/img5_mobile.png'
 
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa'
 
-const SLIDE_DURATION = 15000 // 🐢 very slow
+const SLIDE_DURATION = 15000
 
 const BannerProduct = () => {
   const [currentImage, setCurrentImage] = useState(0)
@@ -30,54 +30,56 @@ const BannerProduct = () => {
     image2Mobile,
     image3Mobile,
     image4Mobile,
-    image5Mobile
+    image5Mobile,
   ]
 
   const images = isMobile ? mobileImages : desktopImages
 
-  // screen detect
+  /* SCREEN SIZE */
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 1024)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+    const checkScreen = () => setIsMobile(window.innerWidth < 768)
+    checkScreen()
+    window.addEventListener('resize', checkScreen)
+    return () => window.removeEventListener('resize', checkScreen)
   }, [])
 
-  // auto slide (mobile only)
+  /* AUTO SLIDE — ALL SCREENS */
   useEffect(() => {
-    if (!isMobile || isPaused) return
+    if (isPaused) return
 
-    const slideTimer = setInterval(() => {
-      setCurrentImage((p) => (p + 1) % images.length)
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length)
       setProgress(0)
     }, SLIDE_DURATION)
 
-    return () => clearInterval(slideTimer)
-  }, [isMobile, isPaused, images.length])
+    return () => clearInterval(timer)
+  }, [isPaused, images.length])
 
-  // progress animation
+  /* PROGRESS BAR */
   useEffect(() => {
-    if (!isMobile || isPaused) return
+    if (isPaused) return
 
     const step = 100 / (SLIDE_DURATION / 100)
-    const progressTimer = setInterval(() => {
-      setProgress((p) => (p >= 100 ? 100 : p + step))
+    const timer = setInterval(() => {
+      setProgress((prev) => (prev >= 100 ? 100 : prev + step))
     }, 100)
 
-    return () => clearInterval(progressTimer)
-  }, [isMobile, isPaused, currentImage])
+    return () => clearInterval(timer)
+  }, [isPaused, currentImage])
 
   const nextImage = () => {
-    setCurrentImage((p) => (p + 1) % images.length)
+    setCurrentImage((prev) => (prev + 1) % images.length)
     setProgress(0)
   }
 
   const prevImage = () => {
-    setCurrentImage((p) => (p === 0 ? images.length - 1 : p - 1))
+    setCurrentImage((prev) =>
+      prev === 0 ? images.length - 1 : prev - 1
+    )
     setProgress(0)
   }
 
-  // swipe
+  /* TOUCH EVENTS */
   const handleTouchStart = (e) => {
     setIsPaused(true)
     touchStartX.current = e.touches[0].clientX
@@ -90,6 +92,7 @@ const BannerProduct = () => {
   const handleTouchEnd = () => {
     setIsPaused(false)
     const diff = touchStartX.current - touchEndX.current
+
     if (diff > 50) nextImage()
     if (diff < -50) prevImage()
   }
@@ -102,57 +105,44 @@ const BannerProduct = () => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-
         {/* SLIDER */}
         <div
-          className={`flex h-full ${
-            isMobile ? 'transition-transform duration-[2000ms] ease-in-out' : ''
-          }`}
-          style={{
-            transform: isMobile
-              ? `translateX(-${currentImage * 100}%)`
-              : 'translateX(0%)',
-          }}
+          className="flex h-full transition-transform duration-[2000ms] ease-in-out"
+          style={{ transform: `translateX(-${currentImage * 100}%)` }}
         >
           {images.map((img, index) => (
-            <div
-              key={index}
-              className="h-72 w-full min-w-full min-h-full bg-slate-200"
-            >
-              <img src={img} className="w-full h-full" alt="" />
+            <div key={index} className="h-72 w-full min-w-full">
+              <img
+                src={img}
+                alt=""
+                className="w-full h-full object-cover"
+              />
             </div>
           ))}
         </div>
 
-        {/* ARROWS — MOBILE ONLY */}
-        {isMobile && (
-          <>
-            <button
-              onClick={prevImage}
-              className="absolute top-1/2 left-3 -translate-y-1/2 bg-white shadow-md rounded-full p-2 text-2xl"
-            >
-              <FaAngleLeft />
-            </button>
+        {/* ARROWS */}
+        <button
+          onClick={prevImage}
+          className="absolute top-1/2 left-3 -translate-y-1/2 bg-white shadow-md rounded-full p-2 text-2xl"
+        >
+          <FaAngleLeft />
+        </button>
 
-            <button
-              onClick={nextImage}
-              className="absolute top-1/2 right-3 -translate-y-1/2 bg-white shadow-md rounded-full p-2 text-2xl"
-            >
-              <FaAngleRight />
-            </button>
-          </>
-        )}
+        <button
+          onClick={nextImage}
+          className="absolute top-1/2 right-3 -translate-y-1/2 bg-white shadow-md rounded-full p-2 text-2xl"
+        >
+          <FaAngleRight />
+        </button>
 
-        {/* PROGRESS BAR — MOBILE ONLY */}
-        {isMobile && (
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-black/10">
-            <div
-              className="h-full bg-white transition-all duration-100"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        )}
-
+        {/* PROGRESS BAR */}
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-black/10">
+          <div
+            className="h-full bg-white transition-all duration-100"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
     </div>
   )

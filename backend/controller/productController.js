@@ -250,11 +250,13 @@ export const getProductCategory = async (req, res) => {
   }
 }
 
-export const getCategoryWiseProduct = async(req,res)=> {
+export const getCategoryWiseProduct = async (req, res) => {
   try {
-    const {category} = req.body
+    const { category } = req?.body || req?.query
+
     const product = await Product.find({ category })
-    res.status(200).status({
+
+    res.status(200).json({
       data: product,
       success: true,
       message: "Category extracted successfully"
@@ -265,7 +267,8 @@ export const getCategoryWiseProduct = async(req,res)=> {
       success: false,
       message: error.message
     })
+    console.log('intenal server error',error)
+    
   }
 }
 
-export default getCategoryWiseProduct

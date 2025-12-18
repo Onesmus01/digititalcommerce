@@ -4,7 +4,6 @@
     try {
 
         const user = await User.findById(req.userId).select("-password")
-        console.log(user)
 
         res.status(200).json({
             success: true,

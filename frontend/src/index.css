@@ -25,3 +25,12 @@ body {
   --color-shop_light_green: #3b9c3c;
   --color-deal-bg: #f1f3f8;
 }
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}
