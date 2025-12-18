@@ -87,10 +87,11 @@ const HorizontalCardProduct = ({ category, heading }) => {
   data.map((product) => (
     <div
       key={product._id}
-      className="group min-w-[350px] h-[160px] rounded-xl border border-slate-200 bg-white hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex"
+      className="group min-w-[250px] h-[160px] rounded border border-slate-200 bg-white hover:shadow-lg hover:border-slate-300 transition-all duration-300 flex"
+      
     >
-      {/* LEFT SIDE IMAGE */}
-      <div className="w-1/2 h-full bg-slate-300 flex items-center justify-center overflow-hidden p-2 rounded-l-xl">
+        {/* LEFT SIDE IMAGE */}
+      <div className="w-1/2 h-full bg-slate-300 flex items-center justify-center overflow-hidden p-2 rounded">
         <img
           src={product?.productImage?.[0]}
           alt={product?.productName}
@@ -99,7 +100,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
       </div>
 
       {/* RIGHT SIDE INFO */}
-      <div className="flex-1 bg-white p-3 overflow-hidden rounded-r-xl flex flex-col justify-between">
+      <div className="flex-1 bg-white p-4 overflow-hidden rounded flex flex-col justify-between">
         <div>
           <p className="text-sm md:text-base font-semibold text-darkColor truncate">
             {product?.productName}
@@ -107,22 +108,28 @@ const HorizontalCardProduct = ({ category, heading }) => {
           <p className="text-[12px] md:text-sm text-lightColor capitalize mt-1">
             {product?.category}
           </p>
-          <p className="text-sm font-bold text-shop_light_green mt-2">
+          <p className="text-sm font-bold text-gray-900 mt-2">
             {displayKESCurrency(product?.selling)}
           </p>
         </div>
-        <button className="mt-2 w-3/4 bg-shop_dark_green text-white text-xs md:text-sm font-semibold py-1 rounded-full hover:bg-shop_light_green transition-colors">
+        <button className="mt-2 w-full   text-gray-900 text-xs md:text-sm font-semibold py-1 rounded-full hover:bg-red-400 transition-colors">
           Add to Cart
         </button>
       </div>
     </div>
   ))}
+     
 
         {/* EMPTY */}
         {!loading && data.length === 0 && (
           <p className="text-sm text-lightColor">No products found.</p>
         )}
       </div>
+      <div className="pt-6">
+        <hr className='bg-gray-300 h-[2px] w-full mx-auto' />
+
+      </div>
+
     </section>
   );
 };

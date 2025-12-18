@@ -51,11 +51,11 @@ const App = () => {
       <div className="flex flex-col min-h-screen">
       {/* Header */}
       <Toaster position="top-center" />
-
+      <div className=""></div>
       <Header />
 
       {/* Main content grows to take available space */}
-      <main className="flex-1">
+      <main className="flex-1 pt-[16px]">
         <Routes>
           <Route path={'/'} element={<Home />} />
           <Route path={'/login'} element={<Login />} />

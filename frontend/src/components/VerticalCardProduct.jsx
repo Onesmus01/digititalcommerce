@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import fetchCategoryWiseProducts from "@/helpers/fetchCategoryWiseProducts.js";
 import displayKESCurrency from "@/helpers/displayCurrency.js";
-import { FaStar,FaStarHalfAlt } from "react-icons/fa";
 
 const VerticalCardProduct = ({ category, heading }) => {
   const [data, setData] = useState([]);
@@ -36,13 +35,11 @@ const VerticalCardProduct = ({ category, heading }) => {
   };
 
   return (
-    <section className="container mx-auto px-4 my-8 relative">
+    <section className="container bg-gray-200 mx-auto px-4 my-8 relative">
       {/* HEADER */}
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-lg font-bold tracking-wide text-darkColor">
-          {heading}
-        </h2>
-        <span className="text-sm text-lightColor hover:text-red-500 hover:underline cursor-pointer transition">
+        <h2 className="text-lg font-bold text-darkColor">{heading}</h2>
+        <span className="text-sm text-lightColor hover:text-red-500 cursor-pointer">
           View all
         </span>
       </div>
@@ -51,8 +48,7 @@ const VerticalCardProduct = ({ category, heading }) => {
       <button
         onClick={scrollLeft}
         className="absolute left-1 top-1/2 -translate-y-1/2 z-10
-        bg-white text-red-500 p-2 rounded-full shadow-lg
-        hover:bg-red-50 hover:scale-110 transition-all"
+        bg-white text-red-500 p-2 rounded-full shadow-lg hover:scale-110"
       >
         <FaAngleLeft />
       </button>
@@ -60,8 +56,7 @@ const VerticalCardProduct = ({ category, heading }) => {
       <button
         onClick={scrollRight}
         className="absolute right-1 top-1/2 -translate-y-1/2 z-10
-        bg-white text-red-500 p-2 rounded-full shadow-lg
-        hover:bg-red-50 hover:scale-110 transition-all"
+        bg-white text-red-500 p-2 rounded-full shadow-lg hover:scale-110"
       >
         <FaAngleRight />
       </button>
@@ -76,8 +71,7 @@ const VerticalCardProduct = ({ category, heading }) => {
           skeletons.map((_, i) => (
             <div
               key={i}
-              className="min-w-[260px] rounded-2xl bg-white border
-              animate-pulse overflow-hidden"
+              className="min-w-[260px] rounded-2xl bg-white border animate-pulse"
             >
               <div className="h-[200px] bg-slate-200" />
               <div className="p-4 space-y-3">
@@ -94,91 +88,83 @@ const VerticalCardProduct = ({ category, heading }) => {
             <div
               key={product._id}
               className="group min-w-[260px] max-w-[260px]
-              bg-white border border-slate-200 rounded-2xl
-              overflow-hidden hover:shadow-xl
-              hover:border-red-200 transition-all duration-300"
+              bg-white border  overflow-hidden
+              hover:shadow-xl transition-all relative"
             >
               {/* IMAGE */}
-              <div className="relative h-[200px] bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+              <div className="relative h-[200px] bg-slate-100 flex items-center justify-center">
                 <img
                   src={product?.productImage?.[0]}
                   alt={product?.productName}
-                  className="h-44 w-44 object-contain
-                  group-hover:scale-110 transition-transform duration-500 mix-blend-multiply"
+                  className="h-44 w-44 object-contain group-hover:scale-110 transition"
                 />
 
-                <span className="absolute top-3 left-3
-                bg-red-500 text-white text-[10px]
-                px-3 py-1 rounded-full tracking-wide shadow">
-                  Premium
-                </span>
+                {/* 🔥 PREMIUM RIBBON WITH DOUBLE V */}
+                <div className="absolute top-0 left-0">
+                  <div className="relative  bg-gray-400  text-white text-[10px] font-bold w-9 py-8">
+                    <span className="rotate-90  inline-block text-center tracking-widest">
+                      PREMIUM
+                    </span>
+
+                    {/* LEFT V CUT */}
+                    <div
+                      className="absolute -bottom-3 left-0 w-0 h-0
+                      border-r-[14px] border-r-transparent
+                      border-t-[12px] border-t-red-600"
+                    />
+
+                    {/* RIGHT V CUT */}
+                    <div
+                      className="absolute -bottom-3 right-0 w-0 h-0
+                      border-l-[14px] border-l-transparent
+                      border-t-[12px] border-t-red-600"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* CONTENT */}
-              <div className="p-1/2 mx-3  flex flex-col gap-1">
-                <p className="text-sm font-semibold text-darkColor truncate">
+              <div className="p-3 flex flex-col gap-1">
+                <p className="text-sm font-semibold truncate">
                   {product?.productName}
                 </p>
 
-                <div className="flex items-center justify-between mr-3">
-                <p className="text-sm text-lightColor capitalize">
-                    <p className='font-bold'>Category</p>
-                  
-                  {product?.category}
-                </p>
-                
-                
-                
-                <div className="items-center justify-end gap-1">
-                  <p className='text-sm'>Rating</p>
-                  <div className="flex">
-                    <div className="flex items-center gap-1">
+                <div className="flex justify-between items-center">
+                  <p className="text-xs text-lightColor capitalize">
+                    {product?.category}
+                  </p>
+
+                  <div className="flex items-center gap-1">
                     {[...Array(4)].map((_, i) => (
                       <FaStar key={i} className="text-yellow-500 text-xs" />
                     ))}
-
                     <FaStarHalfAlt className="text-yellow-500 text-xs" />
-
-                    <span className="ml-1 text-xs font-medium text-darkColor">4.5</span>
+                    <span className="text-xs font-medium">4.5</span>
                   </div>
-                  </div>
-                  
-
                 </div>
-              </div>
 
-                
-                <div className="text-xs text-lighColor line-clamp-1">
+                <p className="text-xs text-lightColor line-clamp-1">
                   {product?.description}
-                </div>
-                <div className="flex overflow-none gap-2 text-center text-sm">
-                  <p className=" text-gray-400 line-through font-bold">
-                  {displayKESCurrency(product?.price)}
                 </p>
 
-                <p className=" font-bold text-red-600">
-                  {displayKESCurrency(product?.selling)}
-                </p>
+                <div className="flex gap-2 text-sm">
+                  <p className="line-through text-gray-400 font-bold">
+                    {displayKESCurrency(product?.price)}
+                  </p>
+                  <p className="font-bold text-red-600">
+                    {displayKESCurrency(product?.selling)}
+                  </p>
                 </div>
-                
 
                 <button
-                  className="mt-1 mx-auto w-1/2 mb-8 bg-red-600 text-white
-                  text-sm font-semibold py-1 rounded-full
-                  hover:bg-red-500 hover:shadow-md
-                  hover:scale-[1.02] active:scale-95
-                  transition-all duration-300"
+                  className="mt-2 mb-3 mx-auto w-1/2 bg-red-600 text-white
+                  text-sm py-1 rounded-full hover:bg-red-500 transition"
                 >
                   Add to Cart
                 </button>
               </div>
             </div>
           ))}
-
-        {/* EMPTY */}
-        {!loading && data.length === 0 && (
-          <p className="text-sm text-lightColor">No products found.</p>
-        )}
       </div>
     </section>
   );
