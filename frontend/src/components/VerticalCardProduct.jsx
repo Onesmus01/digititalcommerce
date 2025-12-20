@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaAngleLeft, FaAngleRight, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import fetchCategoryWiseProducts from "@/helpers/fetchCategoryWiseProducts.js";
 import displayKESCurrency from "@/helpers/displayCurrency.js";
+import addToCart from '@/helpers/addToCart.js'
+
 
 const VerticalCardProduct = ({ category, heading }) => {
   const [data, setData] = useState([]);
@@ -159,6 +161,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                 <button
                   className="mt-2 mb-3 mx-auto w-1/2 bg-red-600 text-white
                   text-sm py-1 rounded-full hover:bg-red-500 transition"
+                  onClick={(e)=>addToCart(e,product?._id)}
                 >
                   Add to Cart
                 </button>

@@ -17,6 +17,7 @@ import AllProducts from '@/pages/AllProducts.jsx'
 import AllUsers from '@/pages/AllUsers.jsx'
 import Products from '@/pages/Product.jsx'
 import CategoryProduct from '@/pages/CategoryProduct.jsx'
+import ProductDetails from '@/pages/ProductDetails.jsx'
 
 let backendUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
@@ -62,6 +63,8 @@ const App = () => {
           <Route path={'/forgot-password'} element={<ForgotPassword />} />
           <Route path={'/sign-up'} element={<SignUp />} />
           <Route path={'/product-category/:categoryName'} element={<CategoryProduct />} />
+          <Route path={'/product/:id'} element={<ProductDetails />} />
+
 
            
            {/* Admin routes */}

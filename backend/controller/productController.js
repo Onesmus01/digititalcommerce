@@ -272,3 +272,23 @@ export const getCategoryWiseProduct = async (req, res) => {
   }
 }
 
+export const getProductDetails = async(req,res)=> {
+  try {
+    const {productId} = req.params
+
+    const product = await Product.findById(productId)
+
+    if(!product){
+      return res.status(400).json({success: false,message: "Product not Found"})
+    }
+    await res.status(200).json({
+      success: true,
+      data: product
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}

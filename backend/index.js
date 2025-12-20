@@ -18,6 +18,7 @@ connectDb()
 
 app.use('/api/user',userRouter)
 app.use('/api/product',productRouter)
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT,()=> console.log(`server is running at port ${PORT}`))
