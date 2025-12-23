@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import productCategory from "@/helpers/productCategory.jsx";
+import ProductCategory from "../helpers/ProductCategory.jsx";
 import VerticalCardProduct from "@/components/VerticalCardProduct.jsx";
 import { Context } from "@/context/ProductContext.jsx";
 
@@ -84,7 +84,7 @@ const CategoryProduct = () => {
 
           <h3 className="text-base uppercase font-medium text-slate-500 border-b pb-1 mt-4">Category</h3>
           <div className="text-sm flex flex-col gap-2 py-3">
-            {productCategory.map((cat) => (
+            {ProductCategory.map((cat) => (
               <label key={cat.value} className="flex items-center gap-2">
                 <input type="checkbox" value={cat.value} checked={!!selectedCategory[cat.value]} onChange={handleSelectCategory} />
                 {cat.label}
