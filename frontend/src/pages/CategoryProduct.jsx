@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import productCategory from "../helpers/productCategory.js";
+import productCategory from "@/helpers/productCategory.jsx";
 import VerticalCardProduct from "@/components/VerticalCardProduct.jsx";
 import { Context } from "@/context/ProductContext.jsx";
 
