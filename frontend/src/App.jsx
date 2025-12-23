@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useEffect,useState} from 'react'
 import Home from './pages/Home.jsx'
 import Header from '@/components/Header.jsx'
 import Footer from '@/components/Footer.jsx'
@@ -18,14 +18,48 @@ import AllUsers from '@/pages/AllUsers.jsx'
 import Products from '@/pages/Product.jsx'
 import CategoryProduct from '@/pages/CategoryProduct.jsx'
 import ProductDetails from '@/pages/ProductDetails.jsx'
+import Cart from '@/pages/Cart.jsx'
+import SearchProduct from '@/components/SearchProduct.jsx'
 
 let backendUrl = import.meta.env.VITE_BACKEND_URL
 const App = () => {
+  const user = useSelector(state=>state?.user?.user)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const userData = useSelector(state=>state?.user?.user)
+  const [data,setData] = useState([])
+  const [loading,setLoading] = useState(false)
+  const [cartProductCount,setCartProductCount] = useState(0)
+
+  const fetchCountCart = async()=> {
+    try {
+      setLoading(true)
+      const response = await fetch(`${backendUrl}/user/count-cart-products`,{
+        method: "GET",
+        credentials: "include"
+      })
+
+      const responseData = await response.json()
+      if(response.ok) {
+        setCartProductCount(responseData.data || 0)
+      } else {
+        toast.error(responseData.message)
+      } 
+    } catch (error) {
+      toast.error(error.message || "Something went wrong")
+      setCartProductCount(0)
+    }finally {
+      setLoading(false)
+    }
+  }
   
+  useEffect(()=> {
+    if (user?._id) {       // only fetch cart count if user exists
+    fetchCountCart();
+  }
+
+  },[user])
 
     const fetchUserDetails = async()=> {
       const dataResponse = await fetch(`${backendUrl}/user/user-details`,{
@@ -47,7 +81,8 @@ const App = () => {
     
   return (
     <Context.Provider value={{
-      fetchUserDetails,navigate
+      fetchUserDetails,navigate,
+      cartProductCount,setCartProductCount,fetchCountCart
     }} >
       <div className="flex flex-col min-h-screen">
       {/* Header */}
@@ -62,9 +97,11 @@ const App = () => {
           <Route path={'/login'} element={<Login />} />
           <Route path={'/forgot-password'} element={<ForgotPassword />} />
           <Route path={'/sign-up'} element={<SignUp />} />
-          <Route path={'/product-category/:categoryName'} element={<CategoryProduct />} />
-          <Route path={'/product/:id'} element={<ProductDetails />} />
+          <Route path="/product-category/:categoryName?" element={<CategoryProduct />} />
 
+          <Route path={'/product/:id'} element={<ProductDetails />} />
+          <Route path={'/cart'} element={<Cart />} /> 
+          <Route path={'/search'} element={<SearchProduct />} /> 
 
            
            {/* Admin routes */}

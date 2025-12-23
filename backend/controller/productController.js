@@ -292,3 +292,91 @@ export const getProductDetails = async(req,res)=> {
     })
   }
 }
+
+export const searchProduct = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    // 🔒 Empty search
+    if (!q || q.trim() === "") {
+      return res.status(200).json({
+        success: true,
+        data: [],
+      });
+    }
+
+    const products = await Product.find({
+      $or: [
+        { productName: { $regex: q, $options: "i" } },
+        { category: { $regex: q, $options: "i" } },
+        { description: { $regex: q, $options: "i" } },
+        { brandName: { $regex: q, $options: "i" } },
+      ],
+    })
+      .limit(20)
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    console.error("Search error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+export const filterProduct = async (req, res) => {
+  try {
+    const categoryList = req?.body?.category || [];
+    console.log("Received categories:", categoryList);
+
+    if (!Array.isArray(categoryList) || categoryList.length === 0) {
+      return res.status(400).json({
+        data: [],
+        message: "No categories provided",
+        error: true,
+        success: false,
+      });
+    }
+
+    // Fetch products that match the categories
+    let products = await Product.find({
+      category: { $in: categoryList },
+    }).lean(); // Use lean() for plain JS objects (better performance)
+
+    // Ensure productImage is always an array
+    products = products.map((p) => ({
+      ...p,
+      productImage: Array.isArray(p.productImage)
+        ? p.productImage
+        : p.productImage
+        ? [p.productImage]
+        : [],
+    }));
+
+    console.log("Fetched products:", products);
+
+    res.status(200).json({
+      data: products,
+      message: "Products fetched successfully",
+      error: false,
+      success: true,
+    });
+  } catch (err) {
+    console.error("filterProduct error:", err);
+    res.status(500).json({
+      message: err.message || err,
+      error: true,
+      success: false,
+    });
+  }
+};
+
+
+

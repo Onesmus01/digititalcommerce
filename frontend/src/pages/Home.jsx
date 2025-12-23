@@ -4,13 +4,17 @@ import CategoryList from '@/components/CategoryList.jsx'
 import BannerProduct from '@/components/BannerProduct.jsx'
 import HorizontalCardProduct from '@/components/HorizontalCardProduct.jsx'
 import VerticalCardProduct from '@/components/VerticalCardProduct.jsx'
-
+import ConveyorBelt from '@/components/ConveyorBelt.jsx'
+import ConveyorBeltReverse from '@/components/ConveyorBeltReverse.jsx'
 const Home = () => {
   return (
     <div>
       <CategoryList />
+      <ConveyorBeltReverse category={"mobiles"} />
+      {/* <ConveyorBelt category={"televisions"}/> */}
       <BannerProduct />
       <HorizontalCardProduct category={"airpodes"} heading={"Top's Airpodes"} />
+      
       <HorizontalCardProduct category={"watches"} heading={"Popular Watches"} />
       <VerticalCardProduct category={"mobiles"} heading={"Mobiles"} />
       <VerticalCardProduct category={"mouse"} heading={"Clickable Mouse"} />

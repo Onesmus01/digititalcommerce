@@ -18,7 +18,7 @@ const Login = () => {
 
   const navigate = useNavigate()
 
-  const {fetchUserDetails} = useContext(Context)
+  const {fetchUserDetails,fetchCountCart} = useContext(Context)
   const handleOnChange = (e)=> {
     const {name,value} = e.target;
     setData((prev)=>  {
@@ -49,6 +49,7 @@ const Login = () => {
         toast.success(responseData.message || "Login sucess")
         navigate('/')
         fetchUserDetails()
+        fetchCountCart()
       }else {
         toast.error(responseData.message || "Login Failed")
       }

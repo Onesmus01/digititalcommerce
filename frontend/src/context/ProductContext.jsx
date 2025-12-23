@@ -2,12 +2,18 @@ import {createContext,useEffect,useState} from 'react'
 import {toast} from 'react-hot-toast'
 import user from '../../store/userSlice.js'
 import {useSelector} from 'react-redux'
+import {Link,useNavigate} from 'react-router-dom'
 export const Context = createContext(null);
 
 let backendUrl = import.meta.env.VITE_BACKEND_URL
 const ProductContext = ({children}) => {
 
+  const navigate = useNavigate()
+
     const user = useSelector(state=>state?.user?.user)
+
+    const [loading,setLoading] = useState(false)
+    const [cartProductCount,setCartProductCount] = useState(0)
 
     const [userDetails,setUserDetails]=useState(null)
     const [updateUser,setUpdateUser] = useState({
@@ -70,6 +76,34 @@ const ProductContext = ({children}) => {
   }
     };
 
+    const fetchCountCart = async()=> {
+    try {
+      setLoading(true)
+      const response = await fetch(`${backendUrl}/user/count-cart-products`,{
+        method: "GET",
+        credentials: "include"
+      })
+
+      const responseData = await response.json()
+      if(response.ok) {
+        setCartProductCount(responseData.data || 0)
+      } else {
+        toast.error(responseData.message)
+      } 
+    } catch (error) {
+      toast.error(error.message || "Something went wrong")
+      setCartProductCount(0)
+    }finally {
+      setLoading(false)
+    }
+  }
+  
+  useEffect(()=> {
+    if (user?._id) {       // only fetch cart count if user exists
+    fetchCountCart();
+  }
+
+  },[user])
 
     const value ={
         userDetails,
@@ -79,7 +113,9 @@ const ProductContext = ({children}) => {
         getAllUsers,
         setUpdateUser,
         updateUserData,
-        toast,backendUrl
+        toast,backendUrl,Link,
+        setCartProductCount,fetchCountCart,cartProductCount,
+        navigate
     }
 
     return(

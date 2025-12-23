@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef ,useContext} from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import fetchCategoryWiseProducts from "@/helpers/fetchCategoryWiseProducts.js";
 import displayKESCurrency from "@/helpers/displayCurrency.js";
 import {Title} from './Title.jsx'
 import {Link} from 'react-router-dom'
 import addToCart from '@/helpers/addToCart.js'
+import  Context from '@/context/index.js'
+
 
 const HorizontalCardProduct = ({ category, heading }) => {
   const [data, setData] = useState([]);
@@ -28,6 +30,16 @@ const HorizontalCardProduct = ({ category, heading }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+
+  const {fetchCountCart} = useContext(Context)
+
+    const handleAddToCart = async(e,id)=>{
+       await addToCart(e,id)
+       fetchCountCart()
+    }
+
+
 
   const scrollLeft = () => {
     railRef.current.scrollBy({ left: -350, behavior: "smooth" });
@@ -118,11 +130,16 @@ const HorizontalCardProduct = ({ category, heading }) => {
           <p className="text-[12px] md:text-sm text-lightColor capitalize mt-1">
             {product?.category}
           </p>
-          <p className="text-sm font-bold text-gray-500 mt-2">
+          <div className="">
+            <p className="text-sm line-through font-bold text-gray-500 mt-2">
+            {displayKESCurrency(product?.price)}
+          </p>
+          <p className="text-sm stroke-orange-500 font-bold text-gray-500 mt-2">
             {displayKESCurrency(product?.selling)}
           </p>
+          </div>
         </div>
-        <button onClick={(e)=>addToCart(e,product?._id)} className="mt-2 w-full   text-gray-600 text-xs md:text-sm font-semibold py-1 rounded-full hover:bg-red-400 transition-colors">
+        <button onClick={(e)=>handleAddToCart(e,product?._id)} className="mt-2 w-full   text-gray-600 text-xs md:text-sm font-semibold py-1 rounded-full hover:bg-red-400 transition-colors">
           Add to Cart
         </button>
       </div>

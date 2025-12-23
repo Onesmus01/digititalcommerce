@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect,useContext } from 'react';
 import Logo from './Logo';
 import { Search, User, ShoppingCart } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { setUserDetails } from '../../store/userSlice.js';
 import  SearchBar  from './SearchBar.jsx';
+import  Context from '@/context/index.js'
+
 let backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Header = () => {
@@ -16,7 +18,9 @@ const Header = () => {
   const userMenuRef = useRef();
 
   const userData = useSelector(state => state?.user?.user);
+   const context = useContext(Context)
 
+   
   // Close dropdown if click outside
   useEffect(() => {
     const handleClickOutside = e => {
@@ -46,6 +50,8 @@ const Header = () => {
       toast.error(error.message || 'Something went wrong');
     }
   };
+
+  
 
   return (
     <header className="shadow-md h-16 bg-white">
@@ -112,14 +118,19 @@ const Header = () => {
           </div>
 
           {/* Cart */}
+          
           <div className="relative">
-            <button className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+            <button onClick={()=>navigate('/cart')} className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
               <ShoppingCart size={20} />
             </button>
-            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-              0
-            </span>
+            
+            {user?._id && context.cartProductCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {context.cartProductCount}
+              </span>
+            )}
           </div>
+
 
           {/* Login (if not logged in) */}
           {!user?._id && (

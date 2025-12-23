@@ -1,16 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef,useContext } from "react";
 import { FaAngleLeft, FaAngleRight, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import fetchCategoryWiseProducts from "@/helpers/fetchCategoryWiseProducts.js";
 import displayKESCurrency from "@/helpers/displayCurrency.js";
 import addToCart from '@/helpers/addToCart.js'
+import {Context} from '@/context/ProductContext.jsx'
+import {Link} from 'react-router-dom'
 
 
 const VerticalCardProduct = ({ category, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const railRef = useRef(null);
-
+  
+  const {fetchCountCart} = useContext(Context)
   const skeletons = new Array(6).fill(null);
+
+   
+
+    const handleAddToCart = async(e,id)=>{
+       await addToCart(e,id)
+       fetchCountCart()
+    }
+
 
   const fetchData = async () => {
     try {
@@ -37,7 +48,7 @@ const VerticalCardProduct = ({ category, heading }) => {
   };
 
   return (
-    <section className="container bg-gray-200 mx-auto px-4 my-8 relative">
+    <section className="container bg-gray-100 mx-auto px-4 my-8 relative">
       {/* HEADER */}
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-lg font-bold text-darkColor">{heading}</h2>
@@ -87,14 +98,14 @@ const VerticalCardProduct = ({ category, heading }) => {
         {/* PRODUCTS */}
         {!loading &&
           data.map((product) => (
-            <div
+            <Link to={`product/${product._id}`}
               key={product._id}
               className="group min-w-[260px] max-w-[260px]
               bg-white border  overflow-hidden
               hover:shadow-xl transition-all relative"
             >
               {/* IMAGE */}
-              <div className="relative h-[200px] bg-slate-100 flex items-center justify-center">
+              <div className="relative h-[200px] border border-b-blue-300 flex items-center justify-center">
                 <img
                   src={product?.productImage?.[0]}
                   alt={product?.productName}
@@ -103,24 +114,12 @@ const VerticalCardProduct = ({ category, heading }) => {
 
                 {/* 🔥 PREMIUM RIBBON WITH DOUBLE V */}
                 <div className="absolute top-0 left-0">
-                  <div className="relative  bg-gray-400  text-white text-[10px] font-bold w-9 py-8">
-                    <span className="rotate-90  inline-block text-center tracking-widest">
+                  <div className="relative bg-gray-400 text-white text-[10px] font-bold w-9 py-8">
+                    <span className="rotate-90 inline-block tracking-widest">
                       PREMIUM
                     </span>
-
-                    {/* LEFT V CUT */}
-                    <div
-                      className="absolute -bottom-3 left-0 w-0 h-0
-                      border-r-[14px] border-r-transparent
-                      border-t-[12px] border-t-red-600"
-                    />
-
-                    {/* RIGHT V CUT */}
-                    <div
-                      className="absolute -bottom-3 right-0 w-0 h-0
-                      border-l-[14px] border-l-transparent
-                      border-t-[12px] border-t-red-600"
-                    />
+                    <div className="absolute -bottom-3 left-0 w-0 h-0 border-r-[14px] border-r-transparent border-t-[12px] border-t-red-600" />
+                    <div className="absolute -bottom-3 right-0 w-0 h-0 border-l-[14px] border-l-transparent border-t-[12px] border-t-red-600" />
                   </div>
                 </div>
               </div>
@@ -161,12 +160,12 @@ const VerticalCardProduct = ({ category, heading }) => {
                 <button
                   className="mt-2 mb-3 mx-auto w-1/2 bg-red-600 text-white
                   text-sm py-1 rounded-full hover:bg-red-500 transition"
-                  onClick={(e)=>addToCart(e,product?._id)}
+                  onClick={(e)=>handleAddToCart(e,product?._id)}
                 >
                   Add to Cart
                 </button>
               </div>
-            </div>
+            </Link>
           ))}
       </div>
     </section>

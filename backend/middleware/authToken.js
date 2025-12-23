@@ -4,7 +4,7 @@ const authToken = async(req,res,next)=> {
         const token = req.cookies?.token || req.headers?.authorization?.replace("Bearer ","").trim()
 
         if(!token){
-            return res.status(400).json({success: false,message: "Token is missing"})
+            return res.status(400).json({success: false,message: "Please Login....."})
         }
 
         const decodedToken =  jwt.verify(token,process.env.JWT_SECRET)

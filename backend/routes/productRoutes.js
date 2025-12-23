@@ -1,5 +1,5 @@
 import express from 'express'
-import {getCategoryWiseProduct, uploadProduct,getAllProducts, updateProduct, deleteProduct, getProductCategory, getProductDetails } from '../controller/productController.js'
+import {getCategoryWiseProduct, uploadProduct,getAllProducts, updateProduct, deleteProduct, getProductCategory, getProductDetails, searchProduct,filterProduct } from '../controller/productController.js'
 import  authToken  from '../middleware/authToken.js'
 
 const productRouter = express.Router()
@@ -11,4 +11,7 @@ productRouter.delete('/delete-product',authToken,deleteProduct)
 productRouter.get('/get-product-category',getProductCategory)
 productRouter.post('/category-product',getCategoryWiseProduct)
 productRouter.get('/get-product-details/:productId',getProductDetails)
+productRouter.get('/search',searchProduct )
+productRouter.post('/filter-category',filterProduct)
+
 export default productRouter
